@@ -1,0 +1,93 @@
+
+  <div>
+    <mat-card>
+      <mat-toolbar class="barra-titulo">
+        <div class="button-row">
+          <button mat-button class="botao-verde" matTooltip="Atualizar lista" (click)="ngOnInit()">
+            <i class="fas fa-sync-alt"></i> Atualizar
+          </button>
+        </div>
+        <span class="fill-remaining-space"></span>
+        <mat-label>{{titulo}}</mat-label>
+        <span class="fill-remaining-space"></span>
+        <div class="button-row">
+          <button mat-button class="botao-verde" matTooltip="Incluir Novo Beneficiario" (click)="onAdd()">
+            <i class="fa fa-plus" aria-hidden="true"></i> Incluir
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <mat-form-field>
+        <mat-label>Busca <i class="fa fa-search" aria-hidden="true"></i></mat-label>
+        <input matInput type="text" name="search" [(ngModel)]="filter" placeholder="Filtro"
+          matTooltip="Realizar uma busca na lista">
+      </mat-form-field>
+
+      <table class="table table-hover table-striped table-sm  linha-lista">
+        <thead>
+          <tr>
+            <th style="width:6px; text-align: center;" class="label-tam">id</th>
+            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+              data-name="beneficiarioNome" matTooltip="Ordenar por Nome">
+              Beneficiario <i class="fas fa-sort"></i>
+            </th>
+            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+              data-name="beneficiarioTelefone" matTooltip="Ordenar por Telefone">
+              Telefone <i class="fas fa-sort"></i>
+            </th>
+            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+              data-name="beneficiarioDataNascimento" matTooltip="Ordenar por Data de Nascimento">
+              Data de Nascimento <i class="fas fa-sort"></i>
+            </th>
+            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+              data-name="beneficiarioDataInclusao" matTooltip="Ordenar por Data de Inclusão">
+              Data de Inclusão <i class="fas fa-sort"></i>
+            </th>
+            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+            data-name="beneficiarioDataAtualizacao" matTooltip="Ordenar por Data de Atualização">
+            Data de Atualização <i class="fas fa-sort"></i>
+          </th>
+            <th style="width:40px; text-align: center;" class="label-tam">
+              Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let beneficiario of beneficiarioLista | filter:filter | paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
+            <td style="width:6px; text-align: center;">{{ beneficiario.id }}</td>
+            <td style="width:40px">{{ beneficiario.beneficiarioNome }}</td>
+            <td style="width:40px">{{beneficiario.beneficiarioTelefone}}</td>
+            <td style="width:40px">{{beneficiario.beneficiarioDataNascimento | date: 'dd/MM/yyyy'}}</td>
+            <td style="width:40px">{{beneficiario.beneficiarioDataInclusao | date: 'dd/MM/yyyy'}}</td>
+            <td style="width:40px">{{beneficiario.beneficiarioDataAtualizacao | date: 'dd/MM/yyyy'}}</td>
+            <td style="width:40px; text-align: center;">
+              <a (click)="onEditar(beneficiario.id, i);">
+                <span class="icon" refresh update matTooltip="Editar Beneficiario">
+                  <i class="fal fa-edit"></i>
+                </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;
+              <a (click)="onRemove(beneficiario.id, i);">
+                <span class="icon2" refresh update matTooltip="Excluir Beneficiario">
+                  <i class="fal fa-trash-alt"></i>
+                </span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="linha-lista2">
+        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel=" Anterior " nextLabel=" Próximo ">
+        </pagination-controls>
+      </div>
+
+      <div class="loading-spinner">
+        <mat-spinner *ngIf="beneficiarioService.loading" [diameter]="60"></mat-spinner>
+      </div>
+      <div class="tabela-rodape"></div>
+
+    </mat-card>
+  </div>
+

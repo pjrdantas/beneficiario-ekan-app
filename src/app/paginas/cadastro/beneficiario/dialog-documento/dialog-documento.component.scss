@@ -1,0 +1,93 @@
+
+
+
+.dialog-barra-titulo {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  height: 30px;
+}
+
+.dialog-controles-container .mat-form-field {
+  width: 90%;
+  padding: 2%;
+  font-size: 12px;
+  height: 15px;
+  color-scheme:  #5cb85c;
+}
+
+.dialog-botao-cancel {
+  color: crimson;
+  text-align: center !important;
+  font-size: 12px !important;
+  width: 90px !important;
+  height: 36px !important;
+}
+
+.dialog-botao-ok {
+  color:  #5cb85c;
+  text-align: center !important;
+  font-size: 12px !important;
+  width: 90px !important;
+  height: 36px !important;
+}
+
+.dialog-rodape {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 20px;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+.mat-checkbox-indeterminate .mat-checkbox-background .mat-checkbox {
+  background-color:#5cb85c !important;
+}
+
+mat-checkbox {
+	::ng-deep .mat-checkbox-inner-container  {
+      width: 12px!important;
+      height: 12px!important;
+  	}
+}
+
+::ng-deep .mat-form-field-label {
+  color:#5cb85c !important;
+}
+
+
+.dialog-rodape {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 20px;
+}
+
+.date {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+}
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: green !important;
+ }
+
+ ::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: green !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+ /*change color of underline when focused*/
+ background-color: green !important;
+}

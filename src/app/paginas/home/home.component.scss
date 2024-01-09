@@ -1,0 +1,29 @@
+html,
+body {
+  height: 100%;
+  position: fixed;
+}
+.label-tam {
+  height: 15px !important;
+  width: 15px !important;
+  font-size: 15px !important;
+  color: hsl(39, 85%, 49%);
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.botao-home {
+  color: hsl(39, 85%, 49%);
+  text-align: center !important;
+  font-size: 15px !important;
+  width: 90px !important;
+  height: 36px !important;
+}
+
+.barra-titulo {
+
+  height: 64px !important;
+
+}

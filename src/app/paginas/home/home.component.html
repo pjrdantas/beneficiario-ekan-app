@@ -1,0 +1,25 @@
+<div>
+
+  <mat-toolbar>
+    <div  >
+      <img    src="./../../../assets/imagens/logoEkan.png">
+    </div>
+    <span class="fill-remaining-space"></span>
+    <div>
+      <mat-label class="label-tam">Modulo Beneficiário</mat-label>
+    </div>
+    <span class="fill-remaining-space"></span>
+    <div *ngIf="powerOn">
+      <button mat-button  class="botao-home" (click)="entrar()">
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
+          Entrar
+      </button>
+    </div>
+    <div *ngIf="powerOff">
+      <button mat-button  class="botao-home" (click)="sair()">
+        <i class="fa fa-sign-out" aria-hidden="true"></i> Sair
+      </button>
+    </div>
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+</div>

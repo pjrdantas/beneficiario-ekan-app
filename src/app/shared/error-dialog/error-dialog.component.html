@@ -1,0 +1,12 @@
+<div *ngIf="data.showContactAdminMessage">
+  <h1 mat-dialog-title style="color: crimson">Atenção!</h1>
+</div>
+<div mat-dialog-content>{{ data.message }}</div>
+<div *ngIf="data.showContactAdminMessage" mat-dialog-content>
+  {{ 'Por favor, contate o administrador do Sistema.' }}
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button class="dialog-botao" mat-dialog-close>
+    Fechar <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</div>

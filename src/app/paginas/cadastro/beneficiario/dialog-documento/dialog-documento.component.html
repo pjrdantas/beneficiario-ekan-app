@@ -1,0 +1,68 @@
+<div>
+  <mat-toolbar class="dialog-barra-titulo" mat-dialog-title>{{titulo}}</mat-toolbar>
+  <form [formGroup]="form" class="normal-form">
+    <mat-card-content>
+      <div class="dialog-controles-container">
+
+        <mat-form-field>
+          <mat-label> Nome do Beneficiario </mat-label>
+          <input matInput type="text" formControlName="beneficiarioNome" [(ngModel)]="beneficiario.beneficiarioNome"
+            placeholder="Digite o nome do beneficiario" required>
+          <mat-error>O Nome é obrigatório.</mat-error>
+        </mat-form-field>
+
+        <mat-grid-list cols="2" rowHeight="200px">
+          <mat-grid-tile>
+            <div class="controles-container">
+              <mat-form-field>
+                <mat-label> Telefone </mat-label>
+                <input matInput type="text" mask="(00) 0000-0000||(00) 0 0000-0000"
+                  formControlName="beneficiarioTelefone" [(ngModel)]="beneficiario.beneficiarioTelefone" required>
+                <mat-error>O telefone é obrigatório.</mat-error>
+              </mat-form-field>
+              <br /><br />
+              <mat-form-field>
+                <mat-label>Data de Nascimento</mat-label>
+                <input type="date" matInput formControlName="beneficiarioDataNascimento"
+                  [(ngModel)]="beneficiario.beneficiarioDataNascimento" required>
+                <mat-error>A data de nascimento é obrigatória.</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <div class="controles-container">
+              <mat-form-field>
+                <mat-label> Data de Atualização </mat-label>
+                <input type="date" matInput formControlName="beneficiarioDataAtualizacao"
+                  [(ngModel)]="beneficiario.beneficiarioDataAtualizacao" required>
+                <mat-error>A data de atualização é obrigatória.</mat-error>
+              </mat-form-field>
+              <br /><br />
+              <mat-form-field>
+                <mat-label> Data de Inclusão </mat-label>
+                <input matInput type="date" formControlName="beneficiarioDataInclusao"
+                  [(ngModel)]="beneficiario.beneficiarioDataInclusao" placeholder="Digite a data da inclusão" required>
+                <mat-error>A data da inclusão é obrigatória.</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </div>
+    </mat-card-content>
+
+
+    <mat-dialog-actions>
+      <button mat-stroked-button mat-dialog-close="refresh" class="dialog-botao-ok" update (click)="salvar()"
+        [disabled]="form.invalid">
+        <i class="fa fa-check" aria-hidden="true"></i> Salvar
+      </button>
+      <button mat-stroked-button mat-dialog-close="refresh" class="dialog-botao-cancel">
+        <i class="fa fa-ban" aria-hidden="true"></i> Cancelar
+      </button>
+    </mat-dialog-actions>
+  </form>
+  <br />
+  <div class="dialog-rodape"></div>
+</div>

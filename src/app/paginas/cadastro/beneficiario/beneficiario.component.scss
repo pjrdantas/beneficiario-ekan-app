@@ -1,0 +1,136 @@
+.mat-card {
+  overflow: auto;
+  max-height: auto;
+  padding: 5px;
+}
+
+table {
+  width: 100%;
+}
+
+.barra-titulo {
+  color:  #f4f7fa;
+  background:#5cb85c;
+  font-size: 15px !important;
+  border-top-left-radius:5px ;
+  border-top-right-radius:5px ;
+  height: 30px;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.button-row button {
+  text-align: right;
+  margin-left: auto;
+  float: right;
+  margin: 10px;
+}
+
+.botao-verde {
+  color: #f4f7fa;
+  text-align: center !important;
+  font-size: 12px !important;
+  align-self: flex-end;
+}
+
+.linha-lista {
+  height: 12px !important;
+  font-size: 12px !important;
+}
+
+.linha-lista2 {
+  text-align: justify;
+  height: 15px !important;
+  font-size: 12px !important;
+}
+
+table {
+  border-radius: 5px;
+}
+
+.icon {
+  font-size: 15px !important;
+  color: #5cb85c;
+}
+
+.icon2 {
+  font-size: 15px !important;
+  color: red;
+}
+
+.label-tam {
+  height: 12px !important;
+  width: 12px !important;
+  font-size: 12px !important;
+  color: #5cb85c;
+}
+
+.tabela-rodape {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 20px;
+}
+
+::ng-deep .ngx-pagination {
+  padding-left: 0px !important;
+  font-style:  #5cb85c !important;
+}
+
+::ng-deep .ngx-pagination .current,
+.btn-info {
+  background: #5cb85c !important;
+  border: transparent !important;
+  border-radius: 3px !important;
+}
+
+:host ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #0CC20C;
+}
+
+.loading-spinner{
+  padding: 20px !important;
+  display:flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: green !important;
+ }
+
+ ::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: green !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+ /*change color of underline when focused*/
+ background-color: green !important;
+}
+
+thead th {
+  cursor: pointer;
+  margin-right: 15px;
+  margin-left: 15px;
+  color: #5cb85c;
+
+  span {
+    visibility: hidden;
+  }
+
+  &.active {
+    color: #5cb85c;
+
+    span {
+      visibility: visible;
+    }
+  }
+}
+
