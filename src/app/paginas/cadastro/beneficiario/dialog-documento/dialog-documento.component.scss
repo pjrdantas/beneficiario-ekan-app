@@ -12,12 +12,13 @@
 }
 
 .dialog-controles-container .mat-form-field {
-  width: 90%;
+  width: 300px;
   padding: 2%;
   font-size: 12px;
   height: 15px;
   color-scheme:  #5cb85c;
 }
+
 
 .dialog-botao-cancel {
   color: crimson;
@@ -62,21 +63,6 @@ mat-checkbox {
 }
 
 
-.dialog-rodape {
-  color: #f4f7fa;
-  background: #5cb85c;
-  font-size: 15px !important;
-  text-align: center;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 20px;
-}
-
-.date {
-  color: #f4f7fa;
-  background: #5cb85c;
-  font-size: 15px !important;
-}
 ::ng-deep .mat-focused .mat-form-field-label {
   /*change color of label*/
   color: green !important;

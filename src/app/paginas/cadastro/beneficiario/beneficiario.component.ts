@@ -74,14 +74,18 @@ export class BeneficiarioComponent implements OnInit {
 
   onAdd() {
     const dialogRef = this.dialog.open(DialogDocumentoComponent, {
-     width: '410px',
-     height: '440px',
+     width: '700px',
+     height: '410px',
      data: { idBeneficiario: 0 },
    });
 
    dialogRef.afterClosed().subscribe((result) => {
      this.getList();
    });
+ }
+
+ onSelect(idBeneficiario: number, index: number): void {
+
  }
 
  onEditar(idBeneficiario: number, index: number): void {

@@ -57,11 +57,17 @@
             *ngFor="let beneficiario of beneficiarioLista | filter:filter | paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
             <td style="width:6px; text-align: center;">{{ beneficiario.id }}</td>
             <td style="width:40px">{{ beneficiario.beneficiarioNome }}</td>
-            <td style="width:40px">{{beneficiario.beneficiarioTelefone}}</td>
+            <td style="width:40px">{{beneficiario.beneficiarioTelefone | mask: '(00) 0000-0000||(00) 0 0000-0000'}}</td>
             <td style="width:40px">{{beneficiario.beneficiarioDataNascimento | date: 'dd/MM/yyyy'}}</td>
             <td style="width:40px">{{beneficiario.beneficiarioDataInclusao | date: 'dd/MM/yyyy'}}</td>
             <td style="width:40px">{{beneficiario.beneficiarioDataAtualizacao | date: 'dd/MM/yyyy'}}</td>
             <td style="width:40px; text-align: center;">
+              <a (click)="onSelect(beneficiario.id, i);">
+                <span class="icon" refresh update matTooltip="Detalhes do Beneficiario (em construção)">
+                  <i class="fal fa-file" aria-hidden="true"></i>
+                </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;
               <a (click)="onEditar(beneficiario.id, i);">
                 <span class="icon" refresh update matTooltip="Editar Beneficiario">
                   <i class="fal fa-edit"></i>

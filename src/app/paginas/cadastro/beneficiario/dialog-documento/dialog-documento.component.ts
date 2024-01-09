@@ -29,10 +29,6 @@ export class DialogDocumentoComponent implements OnInit {
   beneficiario: Beneficiario = new Beneficiario();
   beneficiarioLista: Beneficiario[] = new Array();
 
-  public mask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-
-  telMask= '(00) 00000-0000'; //comece com a que faz sentido
-
   titulo!: string;
   hide = true;
   durationInSeconds = 5;
