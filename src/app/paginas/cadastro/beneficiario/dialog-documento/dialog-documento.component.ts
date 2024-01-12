@@ -1,23 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
+import { Documento } from 'src/app/dominios/documento';
+import { DocumentoService } from 'src/app/services/documento.service';
 import { Beneficiario } from 'src/app/dominios/beneficiario';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
-import { ErrorDialogComponent } from 'src/app/shared/error-dialog/error-dialog.component';
-
 
 
 export interface DialogData {
   idBeneficiario: number;
+  beneficiarioNome: string;
+  beneficiarioTelefone: string;
+  beneficiarioDataAtualizacao: Date;
+  beneficiarioDataInclusao: Date;
+  beneficiarioDataNascimento: Date;
 }
-
 
 @Component({
   selector: 'app-dialog-documento',
@@ -26,6 +26,8 @@ export interface DialogData {
 })
 export class DialogDocumentoComponent implements OnInit {
 
+  documento: Documento = new Documento();
+  documentoLista: Documento[] = new Array();
   beneficiario: Beneficiario = new Beneficiario();
   beneficiarioLista: Beneficiario[] = new Array();
 
@@ -33,135 +35,134 @@ export class DialogDocumentoComponent implements OnInit {
   hide = true;
   durationInSeconds = 5;
 
-
-
   form: FormGroup = new FormGroup({
-    idBeneficiario: new FormControl(null),
-    beneficiarioNome: new FormControl('', [Validators.required]),
-    beneficiarioTelefone: new FormControl('', [Validators.required]),
-    beneficiarioDataNascimento: new FormControl('', [Validators.required]),
-    beneficiarioDataAtualizacao: new FormControl('', [Validators.required]),
-    beneficiarioDataInclusao: new FormControl('', [Validators.required]),
-
+    idDocumento: new FormControl(null),
+    beneficiarioId: new FormControl(0),
+    documentoTipoDocumento: new FormControl('', [Validators.required]),
+    documentoDescricao: new FormControl('', [Validators.required]),
+    documentoDataInclusao: new FormControl('', [Validators.required]),
+    documentoDataAtualizacao: new FormControl('', [Validators.required]),
   });
+
 
   initializeFormGroup() {
     this.form.setValue({
-      idBeneficiario: null,
-      beneficiarioNome: '',
-      beneficiarioTelefone: '',
-      beneficiarioDataNascimento: '',
-      beneficiarioDataAtualizacao: '',
-      beneficiarioDataInclusao: '',
+      idDocumento: null,
+      beneficiarioId: 0,
+      documentoTipoDocumento: '  ',
+      documentoDescricao: '  ',
+      documentoDataInclusao:  '  ',
+      documentoDataAtualizacao:  '  ',
     });
   }
 
-  onError(errorMsg: string) {
-    this.dialog.open(ErrorDialogComponent, {
-      data: errorMsg,
-    });
-  }
+
 
   constructor(
-    private beneficiarioService: BeneficiarioService,
+    public documentoService: DocumentoService,
+    public beneficiarioService: BeneficiarioService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog,
     public dialogRef: MatDialogRef<DialogDocumentoComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: DialogData
   ) { }
 
+
   ngOnInit(): void {
+    this.titulo = 'Cadastrar Documento';
+    this.initializeFormGroup();
+    const beneficiario = new Beneficiario();
+    this.beneficiario.id = this.data.idBeneficiario;
+    this.beneficiario.beneficiarioNome = this.data.beneficiarioNome;
+    this.beneficiario.beneficiarioTelefone = this.data.beneficiarioTelefone;
+    this.beneficiario.beneficiarioDataNascimento = this.data.beneficiarioDataNascimento;
+    this.beneficiario.beneficiarioDataInclusao = this.data.beneficiarioDataInclusao;
+    this.beneficiario.beneficiarioDataAtualizacao = this.data.beneficiarioDataAtualizacao;
+  }
 
+  onNextDocumento(): void {
+    const documento1 = new Documento();
+    documento1.documentoTipoDocumento = this.documento.documentoTipoDocumento;
+    documento1.documentoDescricao = this.documento.documentoDescricao;
+    documento1.documentoDataAtualizacao = this.documento.documentoDataAtualizacao;
+    documento1.documentoDataInclusao = this.documento.documentoDataInclusao;
+    documento1.idDocumento = 0;
+    this.beneficiario.documentos.push(documento1);
+    this.titulo = 'Cadastrar Documento';
+    this.initializeFormGroup();
+  }
 
+  onAdd(): void {
+    this.onNextDocumento();
 
-    if (this.data.idBeneficiario === 0) {
-      this.titulo = 'Cadastrar Beneficiario';
-      this.initializeFormGroup();
+    const operation$ = this.beneficiario.id
+      ? this.beneficiarioService.updateBeneficiario(this.beneficiario)
+      : this.beneficiarioService.addBeneficiario(this.beneficiario);
+
+    operation$.subscribe(
+      (response) => {
+        const res: any = response;
+        const successMessage = this.beneficiario.id
+          ? 'Documento atualizado com Sucesso!'
+          : 'Documento cadastrado com Sucesso!';
+
+        this.handleSuccessResponse(res, successMessage);
+      },
+      (error) => {
+        this.handleError(error, this.beneficiario.id ? 'atualizar' : 'cadastrar');
+      }
+    );
+  }
+
+  private handleSuccessResponse(res: any, successMessage: string): void {
+    if (!res) {
+      this.beneficiarioService.getAllBeneficiario().subscribe(
+        (beneficiarios) => (this.beneficiarioLista = beneficiarios),
+        (error) => this.handleError(error, 'carregar a lista de beneficiários')
+      );
+      this.snackBar.open(successMessage, '', {
+        duration: this.beneficiario.id ? 3000 : 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
     } else {
-      this.titulo = 'Editar Beneficiario';
-      this.beneficiarioService.getBeneficiario(Number(this.data.idBeneficiario)).subscribe((res) => (this.beneficiario = res));
+      let errorMessage = 'Ocorreu um erro desconhecido.';
+      if (res instanceof HttpErrorResponse && res.error && res.error.message) {
+        errorMessage = res.error.message;
+      }
+      this.snackBar.open('ATENÇÃO:', `Ocorreu um erro. Detalhes: ${errorMessage}`, {
+        duration: 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      console.error(res);
     }
   }
 
+  private handleError(error: any, action: string): void {
+    let errorMessage = 'Ocorreu um erro ao';
 
+    if (error instanceof HttpErrorResponse) {
+      if (error.error instanceof ErrorEvent) {
+        errorMessage += ` ${action}. Detalhes: ${error.error.message}`;
+      } else {
+        if (error.status !== 201) {
+          errorMessage += ` ${action} o Documento! Detalhes: ${error.status} - ${error.statusText}`;
+        } else {
+          errorMessage = '';
+        }
+      }
+    }
 
-  salvar(): void {
-    if (this.beneficiario.idBeneficiario === undefined) {
-      this.beneficiarioService
-        .addBeneficiario(this.beneficiario)
-        .subscribe(
-          (response) => {
-            const res: Response = response as Response;
-            if (res === null) {
-              this.beneficiarioService.getAllBeneficiario().subscribe((res) => (this.beneficiarioLista = res));
-              this.snackBar.open('Beneficiario cadastrado com Sucesso!','',
-                {
-                  duration: 4000,
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
-            } else {
-              this.snackBar.open('ATENÇÃO:','Ocorreu um erro ao Cadastrar o Beneficiario!',
-                {
-                  duration: 4000,
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
-              console.error(res);
-            }
-          },
-          (erro) => {
-            this.snackBar.open('ATENÇÃO:','Ocorreu um erro ao Cadastrar o Beneficiario!',
-              {
-                duration: 4000,
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-              }
-            );
-            console.error(erro);
-          }
-        );
-    } else {
-      this.beneficiarioService
-        .updateBeneficiario(this.beneficiario)
-        .subscribe(
-          (response) => {
-            const res: Response = response as unknown as Response;
-            if (res === null) {
-              this.beneficiarioService.getAllBeneficiario().subscribe((res) => (this.beneficiarioLista = res));
-              this.snackBar.open('Beneficiario atualizado com Sucesso!','',
-                {
-                  duration: 3000,
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
-            } else {
-              this.snackBar.open('ATENÇÃO:','Ocorreu um erro ao Cadastrar o Beneficiario!',
-                {
-                  duration: 4000,
-                  horizontalPosition: 'right',
-                  verticalPosition: 'top',
-                }
-              );
-              console.error(res);
-            }
-          },
-          (erro) => {
-            this.snackBar.open(
-              'ATENÇÃO:','Ocorreu um erro ao Cadastrar o Beneficiario!',
-              {
-                duration: 4000,
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-              }
-            );
-            console.error(erro);
-          }
-        );
+    if (errorMessage !== '') {
+      this.snackBar.open('ATENÇÃO:', errorMessage, {
+        duration: 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+      console.error(error);
     }
   }
+
 }

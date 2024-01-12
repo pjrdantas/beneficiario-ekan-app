@@ -1,6 +1,6 @@
 export class Documento {
 
-  id!: number;
+  idDocumento!: number;
   documentoDataAtualizacao!: Date;
   documentoDataInclusao!: Date;
   documentoDescricao!: string;

@@ -1,6 +1,5 @@
 
 
-
 .dialog-barra-titulo {
   color: #f4f7fa;
   background: #5cb85c;
@@ -11,14 +10,25 @@
   height: 30px;
 }
 
-.dialog-controles-container .mat-form-field {
-  width: 300px;
+ .mat-form-field {
+  width: 98%;
   padding: 2%;
-  font-size: 12px;
-  height: 15px;
-  color-scheme:  #5cb85c;
 }
 
+.mat-form-field {
+  color:  #5cb85c;
+}
+
+.mat-input-element {
+  color:  #5cb85c;
+}
+
+.mat-form-field-label {
+  color:  #5cb85c;
+}
+.label-color   {
+  color:  #5cb85c;
+}
 
 .dialog-botao-cancel {
   color: crimson;
@@ -37,14 +47,30 @@
 }
 
 .dialog-rodape {
-  color: #f4f7fa;
   background: #5cb85c;
-  font-size: 15px !important;
-  text-align: center;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   height: 20px;
 }
+
+.dialog-titulo {
+  color: #f4f7fa;
+  background: #5cb85c;
+  font-size: 15px !important;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  height: 30px;
+}
+
+.label-color {
+  font-size: 12px !important;
+  text-align: left;
+  color: #5cb85c;
+}
+
+
 
 ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
 .mat-checkbox-indeterminate .mat-checkbox-background .mat-checkbox {
@@ -58,22 +84,22 @@ mat-checkbox {
   	}
 }
 
-::ng-deep .mat-form-field-label {
+::ng-deep .mat-form-field-label   {
   color:#5cb85c !important;
 }
 
 
 ::ng-deep .mat-focused .mat-form-field-label {
   /*change color of label*/
-  color: green !important;
+  color:  #5cb85c !important;
  }
 
  ::ng-deep.mat-form-field-underline {
   /*change color of underline*/
-  background-color: green !important;
+  background-color:  #5cb85c !important;
 }
 
 ::ng-deep.mat-form-field-ripple {
  /*change color of underline when focused*/
- background-color: green !important;
+ background-color:  #5cb85c !important;
 }

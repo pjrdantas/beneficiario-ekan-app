@@ -1,50 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';  // Importe finalize corretamente
 import { ConfigService } from './config.service';
 import { Beneficiario } from '../dominios/beneficiario';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BeneficiarioService {
-
-  static getAllBeneficiario() {
-    throw new Error('Method not implemented.');
-  }
-
   private baseUrlService = '';
   loading = false;
 
-
-  constructor(
-    private httpClient: HttpClient,
-    public configService: ConfigService
-  )
-
-  {
+  constructor(private httpClient: HttpClient, public configService: ConfigService) {
     this.baseUrlService = configService.getUrlService() + '/beneficiario/';
   }
 
   getAllBeneficiario(): Observable<Beneficiario[]> {
     this.loading = true;
-    return this.httpClient.get<Beneficiario[]>(this.baseUrlService+'findAll/')
-    .pipe( finalize(() => this.loading = false));
+    return this.httpClient.get<Beneficiario[]>(this.baseUrlService + 'findAll/')
+      .pipe(finalize(() => this.loading = false));  // Corrija a aplicação do finalize
   }
 
-  getBeneficiario(idBeneficiario: number) {
-    return this.httpClient.get<Beneficiario>(this.baseUrlService +'findById/'+ idBeneficiario);
+  getBeneficiarioByID(idBeneficiario: number): Observable<Beneficiario> {
+    return this.httpClient.get<Beneficiario>(this.baseUrlService + 'findById/' + idBeneficiario);
   }
 
-  deleteBeneficiario(idBeneficiario: number) {
-    return this.httpClient.delete<Beneficiario>(this.baseUrlService+'delete/' + idBeneficiario);
+  getBeneficiarioByNome(beneficiarioNome: string): Observable<Beneficiario> {
+    const url = `${this.baseUrlService}findByNome/${beneficiarioNome}`;
+    return this.httpClient.get<Beneficiario>(url);
   }
 
-  addBeneficiario(idBeneficiario: Beneficiario) {
-    return this.httpClient.post(this.baseUrlService +'create/', idBeneficiario);
+  deleteBeneficiario(idBeneficiario: number): Observable<Beneficiario> {
+    return this.httpClient.delete<Beneficiario>(this.baseUrlService + 'delete/' + idBeneficiario);
   }
 
-  updateBeneficiario(idBeneficiario: Beneficiario) {
-    return this.httpClient.put<Beneficiario>(this.baseUrlService+'update/', idBeneficiario);
+  addBeneficiario(beneficiario: Beneficiario): Observable<any> {
+    return this.httpClient.post(this.baseUrlService + 'create/', beneficiario);
+  }
+
+  updateBeneficiario(beneficiario: Beneficiario): Observable<any> {
+    return this.httpClient.put(this.baseUrlService + 'update/', beneficiario);
   }
 }

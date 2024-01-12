@@ -1,99 +1,213 @@
+<div>
+  <mat-card>
+    <mat-toolbar class="barra-titulo">
+      <div class="button-row">
+      </div>
+      <span class="fill-remaining-space"></span>
+      <mat-label>{{titulo}}</mat-label>
+      <span class="fill-remaining-space"></span>
+      <div class="button-row">
+      </div>
+    </mat-toolbar>
+    <mat-card-content>
+      <form [formGroup]="form" class="normal-form">
 
-  <div>
-    <mat-card>
-      <mat-toolbar class="barra-titulo">
-        <div class="button-row">
-          <button mat-button class="botao-verde" matTooltip="Atualizar lista" (click)="ngOnInit()">
-            <i class="fas fa-sync-alt"></i> Atualizar
-          </button>
+        <mat-grid-list cols="2" rowHeight="200px">
+          <mat-grid-tile>
+            <div class="controles-container">
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Nome do Beneficiario </mat-label>
+                <input matInput type="text" formControlName="beneficiarioNome"
+                  [(ngModel)]="beneficiario.beneficiarioNome" placeholder="Digite o nome do beneficiario" required>
+                <mat-error>O Nome é obrigatório.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Telefone </mat-label>
+                <input matInput type="text" mask="(00) 0000-0000||(00) 0 0000-0000"
+                  formControlName="beneficiarioTelefone" [(ngModel)]="beneficiario.beneficiarioTelefone" required>
+                <mat-error>O telefone é obrigatório.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label">Data de Nascimento</mat-label>
+                <input type="date" matInput formControlName="beneficiarioDataNascimento"
+                  [(ngModel)]="beneficiario.beneficiarioDataNascimento"  placeholder="Digite a data da nascimento" required max="3000-01-01">
+                <mat-error>A data de nascimento é obrigatória.</mat-error>
+              </mat-form-field>
+
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="controles-container">
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Data de Atualização </mat-label>
+                <input type="date" matInput formControlName="beneficiarioDataAtualizacao"
+                  [(ngModel)]="beneficiario.beneficiarioDataAtualizacao"  placeholder="Digite a data da atualização" required max="3000-01-01">
+                <mat-error>A data de atualização é obrigatória.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Data de Inclusão </mat-label>
+                <input matInput type="date" formControlName="beneficiarioDataInclusao"
+                  [(ngModel)]="beneficiario.beneficiarioDataInclusao" placeholder="Digite a data da inclusão" required max="3000-01-01">
+                <mat-error>A data da inclusão é obrigatória.</mat-error>
+              </mat-form-field>
+
+              <div>
+                <button mat-raised-button class="botao-verde" matTooltip="Incluir Novo Documento" (click)="addDocumento()" [disabled]="form.invalid">
+                <i class="fa fa-plus" aria-hidden="true"></i> Adicionar Documento</button>
+              </div>
+
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <br />
+        <mat-toolbar class="barra-titulo">
+          <span class="fill-remaining-space"></span>Relação de Documentos<span class="fill-remaining-space"></span>
+        </mat-toolbar>
+        <table  class="table table-hover table-striped table-sm  linha-lista">
+          <thead>
+            <tr>
+              <th style="width:50px; text-align: center;" class="custom-label">id</th>
+              <th style="width:50px; text-align: left;" class="custom-label">Tipo </th>
+              <th style="width:150px; text-align: left;" class="custom-label">Documento</th>
+              <th style="width:150px; text-align: left;" class="custom-label">Data de Inclusão</th>
+              <th style="width:150px; text-align: left;" class="custom-label">Data de Atualização</th>
+              <th style="width:50px; text-align: center;" class="custom-label">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of documentoLista; let i = index;">
+              <td>{{ documento.idDocumento }}</td>
+              <td>{{documento.documentoTipoDocumento }}</td>
+              <td>{{documento.documentoDescricao}}</td>
+              <td>{{documento.documentoDataInclusao| date: 'dd/MM/yyyy'}}</td>
+              <td>{{documento.documentoDataAtualizacao| date: 'dd/MM/yyyy'}}</td>
+              <td>
+                <a (click)="onRemoveDocumento(documento.idDocumento, i);">
+                  <span class="icon2" refresh update matTooltip="Excluir Beneficiario">
+                    <i class="fal fa-trash-alt"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <mat-divider></mat-divider>
+
+        <div>
+          <span class="fill-remaining-space"></span>
+          <div class="button-row">
+            <button mat-raised-button mat-dialog-close="refresh" class="dialog-botao-ok" update (click)="salvar()"
+              [disabled]="form.invalid">
+              <i class="fa fa-check" aria-hidden="true"></i> Salvar
+            </button>
+          </div>
+          <span class="fill-space"></span>
+          <div class="button-row">
+            <button mat-raised-button  class="dialog-botao-cancel" onClick="window.location.reload()">
+              <i class="fa fa-ban" aria-hidden="true"></i> Cancelar
+            </button>
+          </div>
         </div>
-        <span class="fill-remaining-space"></span>
-        <mat-label>{{titulo}}</mat-label>
-        <span class="fill-remaining-space"></span>
-        <div class="button-row">
-          <button mat-button class="botao-verde" matTooltip="Incluir Novo Beneficiario" (click)="onAdd()">
-            <i class="fa fa-plus" aria-hidden="true"></i> Incluir
-          </button>
-        </div>
-      </mat-toolbar>
+      </form>
+    </mat-card-content>
 
-      <mat-form-field>
-        <mat-label>Busca <i class="fa fa-search" aria-hidden="true"></i></mat-label>
-        <input matInput type="text" name="search" [(ngModel)]="filter" placeholder="Filtro"
-          matTooltip="Realizar uma busca na lista">
-      </mat-form-field>
+  </mat-card>
 
-      <table class="table table-hover table-striped table-sm  linha-lista">
-        <thead>
-          <tr>
-            <th style="width:6px; text-align: center;" class="label-tam">id</th>
-            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
-              data-name="beneficiarioNome" matTooltip="Ordenar por Nome">
-              Beneficiario <i class="fas fa-sort"></i>
-            </th>
-            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
-              data-name="beneficiarioTelefone" matTooltip="Ordenar por Telefone">
-              Telefone <i class="fas fa-sort"></i>
-            </th>
-            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
-              data-name="beneficiarioDataNascimento" matTooltip="Ordenar por Data de Nascimento">
-              Data de Nascimento <i class="fas fa-sort"></i>
-            </th>
-            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
-              data-name="beneficiarioDataInclusao" matTooltip="Ordenar por Data de Inclusão">
-              Data de Inclusão <i class="fas fa-sort"></i>
-            </th>
-            <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+  <!-- aqui termina a cadastro do beneficiario e inicia a lista de beneficiarios -->
+  <br />
+
+  <mat-card>
+    <mat-toolbar class="barra-titulo">
+      <div class="button-row">
+        <button mat-button class="botao-branco" matTooltip="Atualizar lista" (click)="ngOnInit()">
+          <i class="fas fa-sync-alt"></i> Atualizar
+        </button>
+      </div>
+      <span class="fill-remaining-space"></span>
+    </mat-toolbar>
+
+    <mat-form-field>
+      <mat-label class="custom-label">Busca <i class="fa fa-search" aria-hidden="true"></i></mat-label>
+      <input matInput type="text" name="search" [(ngModel)]="filter" placeholder="Filtro"
+        matTooltip="Realizar uma busca na lista">
+    </mat-form-field>
+
+    <table class="table table-hover table-striped table-sm  linha-lista">
+      <thead>
+        <tr>
+          <th style="width:6px; text-align: center;" class="label-tam">id</th>
+          <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+            data-name="beneficiarioNome" matTooltip="Ordenar por Nome">
+            Beneficiario <i class="fas fa-sort"></i>
+          </th>
+          <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+            data-name="beneficiarioTelefone" matTooltip="Ordenar por Telefone">
+            Telefone <i class="fas fa-sort"></i>
+          </th>
+          <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+            data-name="beneficiarioDataNascimento" matTooltip="Ordenar por Data de Nascimento">
+            Data de Nascimento <i class="fas fa-sort"></i>
+          </th>
+          <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
+            data-name="beneficiarioDataInclusao" matTooltip="Ordenar por Data de Inclusão">
+            Data de Inclusão <i class="fas fa-sort"></i>
+          </th>
+          <th style="width:40px; text-align: left;" class="label-tam" [appSort]="beneficiarioLista" data-order="desc"
             data-name="beneficiarioDataAtualizacao" matTooltip="Ordenar por Data de Atualização">
             Data de Atualização <i class="fas fa-sort"></i>
           </th>
-            <th style="width:40px; text-align: center;" class="label-tam">
-              Ações
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let beneficiario of beneficiarioLista | filter:filter | paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
-            <td style="width:6px; text-align: center;">{{ beneficiario.id }}</td>
-            <td style="width:40px">{{ beneficiario.beneficiarioNome }}</td>
-            <td style="width:40px">{{beneficiario.beneficiarioTelefone | mask: '(00) 0000-0000||(00) 0 0000-0000'}}</td>
-            <td style="width:40px">{{beneficiario.beneficiarioDataNascimento | date: 'dd/MM/yyyy'}}</td>
-            <td style="width:40px">{{beneficiario.beneficiarioDataInclusao | date: 'dd/MM/yyyy'}}</td>
-            <td style="width:40px">{{beneficiario.beneficiarioDataAtualizacao | date: 'dd/MM/yyyy'}}</td>
-            <td style="width:40px; text-align: center;">
-              <a (click)="onSelect(beneficiario.id, i);">
-                <span class="icon" refresh update matTooltip="Detalhes do Beneficiario (em construção)">
-                  <i class="fal fa-file" aria-hidden="true"></i>
-                </span>
-              </a>
-              &nbsp;&nbsp;&nbsp;
-              <a (click)="onEditar(beneficiario.id, i);">
-                <span class="icon" refresh update matTooltip="Editar Beneficiario">
-                  <i class="fal fa-edit"></i>
-                </span>
-              </a>
-              &nbsp;&nbsp;&nbsp;
-              <a (click)="onRemove(beneficiario.id, i);">
-                <span class="icon2" refresh update matTooltip="Excluir Beneficiario">
-                  <i class="fal fa-trash-alt"></i>
-                </span>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <th style="width:40px; text-align: center;" class="label-tam">
+            Ações
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let beneficiario of beneficiarioLista | filter:filter | paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
+          <td style="width:6px; text-align: center;" class="custom-label">{{ beneficiario.id }}</td>
+          <td style="width:40px" class="custom-label">{{ beneficiario.beneficiarioNome }}</td>
+          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioTelefone | mask: '(00) 0000-0000||(00) 0 0000-0000'}}</td>
+          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioDataNascimento | date: 'dd/MM/yyyy'}}</td>
+          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioDataInclusao | date: 'dd/MM/yyyy'}}</td>
+          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioDataAtualizacao | date: 'dd/MM/yyyy'}}</td>
+          <td style="width:40px; text-align: center;">
+            <a (click)="onSelect(beneficiario.id, i);">
+              <span class="icon" refresh update matTooltip="Detalhes do Beneficiario (em construção)">
+                <i class="fal fa-file" aria-hidden="true"></i>
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a (click)="onEditar(beneficiario.id, i);">
+              <span class="icon" refresh update matTooltip="Editar Beneficiario">
+                <i class="fal fa-edit"></i>
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a (click)="onRemove(beneficiario.id, i);">
+              <span class="icon2" refresh update matTooltip="Excluir Beneficiario">
+                <i class="fal fa-trash-alt"></i>
+              </span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <div class="linha-lista2">
-        <pagination-controls (pageChange)="paginaAtual = $event" previousLabel=" Anterior " nextLabel=" Próximo ">
-        </pagination-controls>
-      </div>
+    <div class="linha-lista2">
+      <pagination-controls (pageChange)="paginaAtual = $event" previousLabel=" Anterior " nextLabel=" Próximo ">
+      </pagination-controls>
+    </div>
 
-      <div class="loading-spinner">
-        <mat-spinner *ngIf="beneficiarioService.loading" [diameter]="60"></mat-spinner>
-      </div>
-      <div class="tabela-rodape"></div>
+    <div class="loading-spinner">
+      <mat-spinner *ngIf="beneficiarioService.loading" [diameter]="60"></mat-spinner>
+    </div>
+    <div class="tabela-rodape"></div>
 
-    </mat-card>
-  </div>
-
+  </mat-card>
+</div>
