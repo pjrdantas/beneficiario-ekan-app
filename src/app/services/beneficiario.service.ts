@@ -12,7 +12,10 @@ export class BeneficiarioService {
   private baseUrlService = '';
   loading = false;
 
-  constructor(private httpClient: HttpClient, public configService: ConfigService) {
+  constructor(
+    private httpClient: HttpClient,
+    public configService: ConfigService
+  ) {
     this.baseUrlService = configService.getUrlService() + '/beneficiario/';
   }
 
@@ -22,8 +25,8 @@ export class BeneficiarioService {
       .pipe(finalize(() => this.loading = false));  // Corrija a aplicação do finalize
   }
 
-  getBeneficiarioByID(idBeneficiario: number): Observable<Beneficiario> {
-    return this.httpClient.get<Beneficiario>(this.baseUrlService + 'findById/' + idBeneficiario);
+  getBeneficiarioByID(id: number): Observable<Beneficiario> {
+    return this.httpClient.get<Beneficiario>(this.baseUrlService + 'findById/' + id);
   }
 
   getBeneficiarioByNome(beneficiarioNome: string): Observable<Beneficiario> {
@@ -31,11 +34,11 @@ export class BeneficiarioService {
     return this.httpClient.get<Beneficiario>(url);
   }
 
-  deleteBeneficiario(idBeneficiario: number): Observable<Beneficiario> {
-    return this.httpClient.delete<Beneficiario>(this.baseUrlService + 'delete/' + idBeneficiario);
+  deleteBeneficiario(id: number): Observable<Beneficiario> {
+    return this.httpClient.delete<Beneficiario>(this.baseUrlService + 'delete/' + id);
   }
 
-  addBeneficiario(beneficiario: Beneficiario): Observable<any> {
+  addBeneficiario(beneficiario: Beneficiario): Observable<any>  {
     return this.httpClient.post(this.baseUrlService + 'create/', beneficiario);
   }
 

@@ -5,18 +5,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Documento } from 'src/app/dominios/documento';
-import { DocumentoService } from 'src/app/services/documento.service';
+
 import { Beneficiario } from 'src/app/dominios/beneficiario';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
 
 
 export interface DialogData {
-  idBeneficiario: number;
+  id: number;
   beneficiarioNome: string;
   beneficiarioTelefone: string;
-  beneficiarioDataAtualizacao: Date;
-  beneficiarioDataInclusao: Date;
-  beneficiarioDataNascimento: Date;
+  beneficiarioDataAtualizacao: string;
+  beneficiarioDataInclusao: string;
+  beneficiarioDataNascimento: string;
 }
 
 @Component({
@@ -37,7 +37,6 @@ export class DialogDocumentoComponent implements OnInit {
 
   form: FormGroup = new FormGroup({
     idDocumento: new FormControl(null),
-    beneficiarioId: new FormControl(0),
     documentoTipoDocumento: new FormControl('', [Validators.required]),
     documentoDescricao: new FormControl('', [Validators.required]),
     documentoDataInclusao: new FormControl('', [Validators.required]),
@@ -48,18 +47,17 @@ export class DialogDocumentoComponent implements OnInit {
   initializeFormGroup() {
     this.form.setValue({
       idDocumento: null,
-      beneficiarioId: 0,
-      documentoTipoDocumento: '  ',
-      documentoDescricao: '  ',
-      documentoDataInclusao:  '  ',
-      documentoDataAtualizacao:  '  ',
+      documentoTipoDocumento: ' ',
+      documentoDescricao: ' ',
+      documentoDataInclusao: ' ',
+      documentoDataAtualizacao: ' ',
     });
   }
 
 
 
   constructor(
-    public documentoService: DocumentoService,
+
     public beneficiarioService: BeneficiarioService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DialogDocumentoComponent>,
@@ -72,9 +70,10 @@ export class DialogDocumentoComponent implements OnInit {
     this.titulo = 'Cadastrar Documento';
     this.initializeFormGroup();
     const beneficiario = new Beneficiario();
-    this.beneficiario.id = this.data.idBeneficiario;
+    this.beneficiario.id = this.data.id;
     this.beneficiario.beneficiarioNome = this.data.beneficiarioNome;
     this.beneficiario.beneficiarioTelefone = this.data.beneficiarioTelefone;
+
     this.beneficiario.beneficiarioDataNascimento = this.data.beneficiarioDataNascimento;
     this.beneficiario.beneficiarioDataInclusao = this.data.beneficiarioDataInclusao;
     this.beneficiario.beneficiarioDataAtualizacao = this.data.beneficiarioDataAtualizacao;
@@ -86,7 +85,7 @@ export class DialogDocumentoComponent implements OnInit {
     documento1.documentoDescricao = this.documento.documentoDescricao;
     documento1.documentoDataAtualizacao = this.documento.documentoDataAtualizacao;
     documento1.documentoDataInclusao = this.documento.documentoDataInclusao;
-    documento1.idDocumento = 0;
+    documento1.id = 0;
     this.beneficiario.documentos.push(documento1);
     this.titulo = 'Cadastrar Documento';
     this.initializeFormGroup();
@@ -94,7 +93,7 @@ export class DialogDocumentoComponent implements OnInit {
 
   onAdd(): void {
     this.onNextDocumento();
-
+    console.info('onAdd() - this.beneficiario.id :',this.beneficiario.id);
     const operation$ = this.beneficiario.id
       ? this.beneficiarioService.updateBeneficiario(this.beneficiario)
       : this.beneficiarioService.addBeneficiario(this.beneficiario);

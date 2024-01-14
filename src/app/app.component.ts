@@ -1,23 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent  implements OnInit {
 
-  mostrarBenificiario!: boolean;
+  constructor() { }
 
-  ngOnInit(): void {
-    this.mostrarBenificiario = false
+  ngOnInit() {
   }
 
-  logIn(){
-   this.mostrarBenificiario = true;
-  }
 
-  logOut(){
-    this.mostrarBenificiario = false;
-  }
 }

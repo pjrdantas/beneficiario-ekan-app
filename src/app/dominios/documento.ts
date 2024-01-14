@@ -1,8 +1,8 @@
 export class Documento {
 
-  idDocumento!: number;
-  documentoDataAtualizacao!: Date;
-  documentoDataInclusao!: Date;
+  id!: number;
+  documentoDataAtualizacao!: string;
+  documentoDataInclusao!: string;
   documentoDescricao!: string;
   documentoTipoDocumento!: string;
   beneficiarioId!: number;

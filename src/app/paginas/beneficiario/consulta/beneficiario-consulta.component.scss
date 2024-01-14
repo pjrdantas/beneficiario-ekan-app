@@ -4,10 +4,6 @@
   padding: 5px;
 }
 
-table {
-  width: 100%;
-}
-
 .barra-titulo {
   color:  #f4f7fa;
   background:#5cb85c;
@@ -21,11 +17,6 @@ table {
   flex: 1 1 auto;
 }
 
-.fill-space {
-  width: 20px !important;
-  height: 36px !important;
-}
-
 .button-row button {
   text-align: right;
   margin-left: auto;
@@ -33,15 +24,7 @@ table {
   margin: 10px;
 }
 
-
 .botao-verde {
-  color: #5cb85c;
-  text-align: center !important;
-  font-size: 12px !important;
-  align-self: flex-end;
-}
-
-.botao-branco {
   color: #f4f7fa;
   text-align: center !important;
   font-size: 12px !important;
@@ -61,6 +44,7 @@ table {
 
 table {
   border-radius: 5px;
+  width: 100%;
 }
 
 .icon {
@@ -75,10 +59,30 @@ table {
 
 .label-tam {
   height: 12px !important;
+  width: 12px !important;
+  font-size: 12px !important;
   color: #5cb85c;
 }
 
+.mat-form-field {
+  color:  #5cb85c;
+}
 
+.mat-input-element {
+  color:  #5cb85c;
+}
+
+.mat-form-field-label {
+  color:  #5cb85c;
+}
+
+.label-color   {
+  color:  #5cb85c;
+}
+
+.custom-label {
+  color:#5cb85c;
+}
 
 .tabela-rodape {
   color: #f4f7fa;
@@ -91,7 +95,7 @@ table {
 }
 
 ::ng-deep .ngx-pagination {
-  padding-left: 0px !important;
+  padding-left: 1px !important;
   font-style:  #5cb85c !important;
 }
 
@@ -115,17 +119,17 @@ table {
 
 ::ng-deep .mat-focused .mat-form-field-label {
   /*change color of label*/
-  color:  #5cb85c !important;
+  color: green !important;
  }
 
  ::ng-deep.mat-form-field-underline {
   /*change color of underline*/
-  background-color:  #5cb85c !important;
+  background-color: green !important;
 }
 
 ::ng-deep.mat-form-field-ripple {
  /*change color of underline when focused*/
- background-color:  #5cb85c !important;
+ background-color: green !important;
 }
 
 thead th {
@@ -147,43 +151,6 @@ thead th {
   }
 }
 
-.mat-form-field {
-  color:  #5cb85c;
-}
-
-.mat-input-element {
-  color:  #5cb85c;
-}
-
-.mat-form-field-label {
-  color:  #5cb85c;
-}
-.label-color   {
-  color:  #5cb85c;
-}
-
-.custom-label {
-  color:#5cb85c; /* Cor da label */
-}
-
-
-
-.dialog-botao-cancel {
-  color: crimson;
-  text-align: center !important;
-  font-size: 12px !important;
-  width: 120px !important;
-  height: 36px !important;
-}
-
-.dialog-botao-ok {
-  color:  #5cb85c;
-  text-align: center !important;
-  font-size: 12px !important;
-  width: 120px !important;
-  height: 36px !important;
-}
-
 form.normal-form {
   margin: 10px;
   color:  #5cb85c;
@@ -200,8 +167,4 @@ form.normal-form {
 
 .controles-container>* {
   width: 100%;
-}
-
-.add-bottom-padding {
-  padding-bottom: 10px;
 }

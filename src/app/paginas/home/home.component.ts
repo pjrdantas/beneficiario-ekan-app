@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppComponent } from '../../app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   powerOff!: boolean;
 
 
-  constructor(private appComponent: AppComponent) { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.powerOn=true;
@@ -22,13 +22,13 @@ export class HomeComponent implements OnInit {
   entrar(){
     this.powerOn=false;
     this.powerOff=true;
-    this.appComponent.logIn();
+    this.router.navigate(['/beneficiario-consulta']);
   }
 
   sair(){
     this.powerOn=true;
     this.powerOff=false;
-    this.appComponent.logOut();
+    this.router.navigate(['/']);
   }
 
 }

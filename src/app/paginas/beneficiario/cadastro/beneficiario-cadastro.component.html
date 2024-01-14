@@ -1,0 +1,131 @@
+<div class="container">
+  <br />
+  <mat-card>
+    <mat-toolbar class="barra-titulo">
+      <div class="button-row">
+      </div>
+      <span class="fill-remaining-space"></span>
+      <mat-label>{{titulo}}</mat-label>
+      <span class="fill-remaining-space"></span>
+      <div class="button-row">
+      </div>
+    </mat-toolbar>
+    <mat-card-content>
+      <form [formGroup]="form" class="normal-form">
+
+        <mat-grid-list cols="2" rowHeight="200px">
+          <mat-grid-tile>
+            <div class="controles-container">
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Nome do Beneficiario </mat-label>
+                <input matInput type="text" formControlName="beneficiarioNome"
+                  [(ngModel)]="beneficiario.beneficiarioNome" placeholder="Digite o nome do beneficiario" required>
+                <mat-error>O Nome é obrigatório.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Telefone </mat-label>
+                <input matInput  mask="(00) 0000-0000||(00) 0 0000-0000"
+                  formControlName="beneficiarioTelefone" [(ngModel)]="beneficiario.beneficiarioTelefone" required>
+                <mat-error>O telefone é obrigatório.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label">Data de Nascimento</mat-label>
+                <input matInput  [maxlength]="10" inputDateMask formControlName="beneficiarioDataNascimento"
+                  [(ngModel)]="beneficiario.beneficiarioDataNascimento"  placeholder="dd/mm/aaaa" >
+              <mat-error>A Data Invalida</mat-error>
+              </mat-form-field>
+
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="controles-container">
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Data de Atualização </mat-label>
+                <input matInput  [maxlength]="10" inputDateMask formControlName="beneficiarioDataAtualizacao"
+                  [(ngModel)]="beneficiario.beneficiarioDataAtualizacao"  placeholder="Digite a data da atualização" required>
+                <mat-error>A data de atualização é obrigatória.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label class="custom-label"> Data de Inclusão </mat-label>
+                <input matInput  [maxlength]="10" inputDateMask formControlName="beneficiarioDataInclusao"
+                  [(ngModel)]="beneficiario.beneficiarioDataInclusao" placeholder="Digite a data da inclusão" required>
+                <mat-error>A data da inclusão é obrigatória.</mat-error>
+              </mat-form-field>
+
+              <div>
+                <button mat-raised-button class="botao-verde" matTooltip="Incluir Novo Documento" (click)="addDocumento()" [disabled]="form.invalid">
+                <i class="fa fa-plus" aria-hidden="true"></i> Adicionar Documento</button>
+              </div>
+
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+
+        <mat-toolbar class="barra-titulo">
+          <span class="fill-remaining-space"></span>Relação de Documentos<span class="fill-remaining-space"></span>
+        </mat-toolbar>
+        <table  class="table table-hover table-striped table-sm  linha-lista">
+          <thead>
+            <tr>
+              <th style="width:50px; text-align: left;" class="custom-label">id</th>
+              <th style="width:50px; text-align: left;" class="custom-label">Tipo </th>
+              <th style="width:150px; text-align: left;" class="custom-label">Documento</th>
+              <th style="width:150px; text-align: center;" class="custom-label">Data de Inclusão</th>
+              <th style="width:150px; text-align: center;" class="custom-label">Data de Atualização</th>
+              <th style="width:50px; text-align: center;" class="custom-label">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of documentoLista| paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
+              <td style="width:50px; text-align: left;" class="custom-label">{{ documento.id }}</td>
+              <td style="width:50px; text-align: left;" class="custom-label">{{documento.documentoTipoDocumento }}</td>
+              <td style="width:150px; text-align: left;" class="custom-label">{{documento.documentoDescricao}}</td>
+              <td style="width:150px; text-align: center;" class="custom-label">{{documento.documentoDataInclusao}}</td>
+              <td style="width:150px; text-align: center;" class="custom-label">{{documento.documentoDataAtualizacao}}</td>
+              <td style="width:50px; text-align: center;">
+                <a (click)="onRemoveDocumento(documento.id, i);">
+                  <span class="icon2" refresh update matTooltip="Excluir Documento">
+                    <i class="fal fa-trash-alt"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="linha-lista2">
+          <pagination-controls (pageChange)="paginaAtual = $event" previousLabel=" Anterior " nextLabel=" Próximo ">
+          </pagination-controls>
+        </div>
+
+        <br />
+        <mat-divider></mat-divider>
+
+        <div>
+          <span class="fill-remaining-space"></span>
+          <div class="button-row">
+            <button mat-raised-button  class="dialog-botao-ok" update (click)="salvar()"
+              [disabled]="form.invalid">
+              <i class="fa fa-check" aria-hidden="true"></i> Salvar
+            </button>
+          </div>
+          <span class="fill-space"></span>
+          <div class="button-row">
+            <button mat-raised-button type="button" class="dialog-botao-cancel" (click)="onCancel()">
+              <i class="fa fa-ban" aria-hidden="true"></i> Cancelar
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+    <br /> <br />
+    <div class="tabela-rodape"></div>
+  </mat-card>
+
+</div>

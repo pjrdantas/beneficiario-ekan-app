@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { Beneficiario } from 'src/app/dominios/beneficiario';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
+import { ErrorDialogComponent } from 'src/app/shared/error-dialog/error-dialog.component';
+import { DialogDocumentoComponent } from '../dialog-documento/dialog-documento.component';
 import { Documento } from 'src/app/dominios/documento';
 import { DocumentoService } from 'src/app/services/documento.service';
-import { ErrorDialogComponent } from 'src/app/shared/error-dialog/error-dialog.component';
-import { DialogDocumentoComponent } from './dialog-documento/dialog-documento.component';
 
 export interface DialogData {
-  idBeneficiario: number;
+  id: number;
   beneficiarioNome: string;
   beneficiarioTelefone: string;
   beneficiarioDataAtualizacao: Date;
@@ -21,37 +22,40 @@ export interface DialogData {
   beneficiarioDataNascimento: Date;
 }
 
+
+
 @Component({
-  selector: 'app-beneficiario',
-  templateUrl: './beneficiario.component.html',
-  styleUrls: ['./beneficiario.component.scss']
+  selector: 'app-beneficiario-cadastro',
+  templateUrl: './beneficiario-cadastro.component.html',
+  styleUrls: ['./beneficiario-cadastro.component.scss']
 })
-export class BeneficiarioComponent implements OnInit {
+export class BeneficiarioCadastroComponent implements OnInit {
 
   beneficiario: Beneficiario = new Beneficiario();
   beneficiarioLista: Beneficiario[] = new Array();
 
   documento: Documento = new Documento();
   documentoLista: Documento[] = new Array();
-
   titulo!: string;
-  filter: string = '';
   paginaAtual: number = 1;
   contador = 5;
 
+
   form: FormGroup = new FormGroup({
-    idBeneficiario: new FormControl(null),
-    beneficiarioNome: new FormControl('', [Validators.required]),
-    beneficiarioTelefone: new FormControl('', [Validators.required]),
-    beneficiarioDataNascimento: new FormControl('', [Validators.required]),
-    beneficiarioDataAtualizacao: new FormControl('', [Validators.required]),
-    beneficiarioDataInclusao: new FormControl('', [Validators.required]),
+    id: new FormControl(null),
+    beneficiarioNome: new FormControl('', Validators.required),
+    beneficiarioTelefone: new FormControl('', Validators.required),
+    beneficiarioDataNascimento: new FormControl('', Validators.required),
+    beneficiarioDataAtualizacao: new FormControl('', Validators.required),
+    beneficiarioDataInclusao: new FormControl('', Validators.required),
 
   });
 
+
+
   initializeFormGroup() {
     this.form.setValue({
-      idBeneficiario: null,
+      id: null,
       beneficiarioNome: ' ',
       beneficiarioTelefone: ' ',
       beneficiarioDataNascimento: ' ',
@@ -63,23 +67,41 @@ export class BeneficiarioComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     public beneficiarioService: BeneficiarioService,
     public documentoService: DocumentoService,
-    private dialog: MatDialog
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.titulo = 'Cadastro de Beneficiario';
-    this.filter = '';
-    this.getList();
+    this.activatedRoute.params.subscribe(parametro => {
+      if (parametro['id'] === undefined) {
+        this.titulo = 'Adicionar Beneficiario';
+        this.initializeFormGroup();
+      } else {
+        this.titulo = 'Editar Beneficiario';
+        this.beneficiarioService.getBeneficiarioByID(Number(parametro['id'])).subscribe(res => this.beneficiario = res);
+        //console.info("parametro['id'] :", parametro['id']);
+        this.getListDocumentoByBeneficiarioId(Number(parametro['id']));
+      }
+    });
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/beneficiario-consulta']);
   }
 
   addDocumento(): void {
+    console.info("addDocumento() - O ID CARREGADO AQUI É :", this.beneficiario.id);
+    if (this.beneficiario.id === undefined) {
+        this.beneficiario.id = 0;
+    }
     const dialogRef = this.dialog.open(DialogDocumentoComponent, {
       width: '460px',
       height: '430px',
       data: {
-        idBeneficiario: 0,
+        id: this.beneficiario.id,
         beneficiarioNome: this.beneficiario.beneficiarioNome,
         beneficiarioTelefone: this.beneficiario.beneficiarioTelefone,
         beneficiarioDataNascimento: this.beneficiario.beneficiarioDataNascimento,
@@ -90,18 +112,13 @@ export class BeneficiarioComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.getList();
-    });
-  }
 
-  onError(errorMsg: string, showContactAdminMessage: boolean) {
-    this.dialog.open(ErrorDialogComponent, {
-      data: { message: errorMsg, showContactAdminMessage: showContactAdminMessage },
     });
-  }
 
+  }
 
   getList(): void {
-    console.log("O NOME CARREGADO AQUI É :", this.beneficiario.beneficiarioNome);
+    //console.log("O NOME CARREGADO AQUI É :", this.beneficiario.beneficiarioNome);
     if (this.beneficiario.beneficiarioNome !== undefined) {
       this.getBeneficiarioPorNome(this.beneficiario.beneficiarioNome);
     }
@@ -123,28 +140,6 @@ export class BeneficiarioComponent implements OnInit {
       });
   }
 
-
-  onRemove(idBeneficiario: number, index: number): void {
-    this.beneficiarioService.deleteBeneficiario(idBeneficiario).pipe(
-      catchError(error => {
-        let errorMessage = '';
-        errorMessage = 'Não foi possível excluir o cadastro.';
-        this.onError(errorMessage, true);
-        return of([])
-      })
-    ).subscribe(
-      (response) => {
-        this.beneficiarioService.getAllBeneficiario().subscribe((res) => (this.beneficiarioLista = res));
-        this.initializeFormGroup();
-        this.snackBar.open('Beneficiario excluido com Sucesso!', '', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      }
-    );
-  }
-
   getBeneficiarioPorNome(beneficiarioNome: string): void {
     this.beneficiarioService.getBeneficiarioByNome(beneficiarioNome).pipe(
       catchError((error) => {
@@ -159,7 +154,7 @@ export class BeneficiarioComponent implements OnInit {
         if (beneficiario !== null && beneficiario !== undefined) {
           this.beneficiario = beneficiario;
           if (this.beneficiario.hasOwnProperty('id')) {
-            console.error('Beneficiário id:', this.beneficiario.id);
+            //console.error('Beneficiário id:', this.beneficiario.id);
             this.getListDocumentoByBeneficiarioId(this.beneficiario.id);
           } else {
             console.error('Beneficiário não possui a propriedade idBeneficiario.');
@@ -171,7 +166,8 @@ export class BeneficiarioComponent implements OnInit {
   }
 
   getListDocumentoByBeneficiarioId(beneficiarioId: number): void {
-    this.documentoService.getAllDocumentoByBeneficiarioId(this.beneficiario.id).pipe(
+
+    this.documentoService.getAllDocumentoByBeneficiarioId(beneficiarioId).pipe(
       catchError((error) => {
         let errorMessage = 'Ocorreu um erro ao tentar carregar a lista de documentos.';
         if (error.status === 404) {
@@ -188,36 +184,43 @@ export class BeneficiarioComponent implements OnInit {
       });
   }
 
+  onError(errorMsg: string, showContactAdminMessage: boolean) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: { message: errorMsg, showContactAdminMessage: showContactAdminMessage },
+    });
+  }
 
+  onRemoveDocumento(idDocumento: number, index: number): void {
+  this.documentoService.deleteDocumento(idDocumento).pipe(
+    catchError(error => {
+      let errorMessage = 'Não foi possível excluir o cadastro.';
+      this.onErrorRemove(errorMessage, true);
+      return of([]);
+    })
+  ).subscribe(
+    () => {
+      this.documentoService.getAllDocumentoByBeneficiarioId(this.beneficiario.id).subscribe((res) => {
+        this.documentoLista = res;
+        this.snackBar.open('Documento excluído com sucesso!', '', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      });
+    }
+  );
+  //this.ngOnInit();
+  // ------------------>
+  }
 
-
-
-
-
-
-
-
-
-  onSelect(idBeneficiario: number, index: number): void {
+  onErrorRemove(errorMessage: string, isError: boolean): void {
+    console.error(errorMessage);
 
   }
 
-  onEditar(idBeneficiario: number, index: number): void {/*
-  const dialogRef = this.dialog.open(DialogDocumentoComponent, {
-   width: '700px',
-   height: '340px',
-   data: { idBeneficiario: idBeneficiario },
- });
 
- dialogRef.afterClosed().subscribe((result) => {
-   this.getList();
- }); */
-  }
-
-
-
-  salvar(): void { /*
-  if (this.beneficiario.idBeneficiario === undefined) {
+  salvar(): void {
+  if (this.beneficiario.id === undefined) {
     this.beneficiarioService.addBeneficiario(this.beneficiario).subscribe(
         (response) => {
           const res: Response = response as Response;
@@ -291,7 +294,8 @@ export class BeneficiarioComponent implements OnInit {
         }
       );
       }
-    */}
+      this.router.navigate(['/beneficiario-consulta']);
+     }
 /*
     onErrorRemove(errorMessage: string, isError: boolean): void {
       console.error(errorMessage);
@@ -306,46 +310,5 @@ export class BeneficiarioComponent implements OnInit {
     }
 
 */
-  onRemoveDocumento(idDocumento: number, index: number): void { /*
-  this.documentoService.deleteDocumento(idDocumento).pipe(
-    catchError(error => {
-      let errorMessage = 'Não foi possível excluir o cadastro.';
-      this.onErrorRemove(errorMessage, true);
-      return of([]);
-    })
-  ).subscribe(
-    () => {
-      this.documentoService.getAllDocumento().subscribe((res) => {
-        this.documentoLista = res;
-        this.snackBar.open('Documento excluído com sucesso!', '', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      });
-    }
-  ); */
-  }
-
-  /*
-    getListDocumento(): void {
-      this.documentoService.getAllDocumento().pipe(
-        catchError((error) => {
-          let errorMessage = 'Ocorreu um erro ao tentar carregar a Lista de Documentos do Beneficiario.';
-          if (error.status === 404) {
-            errorMessage = 'A Lista de documentos do Beneficiario está vazia.';
-          }
-          this.onErrorDocumento(errorMessage, error.status !== 404);
-          return of([]);
-        }),
-        finalize(() => {
-        })
-      )
-      .subscribe((res) => {
-        this.documentoLista = res;
-      });
-    }
-
-  */
 
 }

@@ -25,19 +25,9 @@ export class DocumentoService {
     );
   }
 
-  getDocumento(id: number) {
-    return this.httpClient.get<Documento>(this.baseUrlService + `findById/${id}`);
+  deleteDocumento(id: number): Observable<Documento> {
+    return this.httpClient.delete<Documento>(this.baseUrlService + 'delete/' + id);
   }
 
-  deleteDocumento(id: number) {
-    return this.httpClient.delete<Documento>(this.baseUrlService + `delete/${id}`);
-  }
 
-  addDocumento(documento: Documento) {
-    return this.httpClient.post(this.baseUrlService + 'create/', documento);
-  }
-
-  updateDocumento(documento: Documento) {
-    return this.httpClient.put<Documento>(this.baseUrlService + 'update/', documento);
-  }
 }
