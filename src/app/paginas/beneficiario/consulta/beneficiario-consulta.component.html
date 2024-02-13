@@ -11,7 +11,8 @@
       <mat-label>{{titulo}}</mat-label>
       <span class="fill-remaining-space"></span>
       <div class="button-row">
-        <button mat-button class="botao-verde" matTooltip="Incluir Novo Beneficiario" [routerLink]="['/beneficiario-cadastro']">
+        <button mat-button class="botao-verde" matTooltip="Incluir Novo Beneficiario"
+          [routerLink]="['/beneficiario-cadastro']">
           <i class="fa fa-plus" aria-hidden="true"></i> Incluir
         </button>
       </div>
@@ -19,7 +20,8 @@
 
     <mat-form-field>
       <mat-label class="label-color">Busca <i class="fa fa-search label-color" aria-hidden="true"></i></mat-label>
-      <input  class="label-color" matInput type="text" name="search"  [(ngModel)]="filter"  placeholder="Filtro" matTooltip="Realizar uma busca na lista">
+      <input class="label-color" matInput type="text" name="search" [(ngModel)]="filter" placeholder="Filtro"
+        matTooltip="Realizar uma busca na lista">
     </mat-form-field>
 
     <table class="table table-hover table-striped table-sm  linha-lista">
@@ -56,10 +58,14 @@
           *ngFor="let beneficiario of beneficiarioLista | filter:filter | paginate: { itemsPerPage: contador, currentPage: paginaAtual }; let i = index;">
           <td style="width:6px; text-align: center;" class="custom-label">{{ beneficiario.id }}</td>
           <td style="width:100px" class="custom-label">{{ beneficiario.beneficiarioNome }}</td>
-          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioTelefone | mask: '(00) 0000-0000||(00) 0 0000-0000'}}</td>
-          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataNascimento }}</td>
-          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataInclusao }}</td>
-          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataAtualizacao }}</td>
+          <td style="width:40px" class="custom-label">{{beneficiario.beneficiarioTelefone | mask: '(00) 0000-0000||(00)
+            0 0000-0000'}}</td>
+          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataNascimento }}
+          </td>
+          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataInclusao }}
+          </td>
+          <td style="width:40px; text-align: center;" class="custom-label">{{beneficiario.beneficiarioDataAtualizacao }}
+          </td>
           <td style="width:40px; text-align: center;">
             <a (click)="onEditar(beneficiario.id, i);">
               <span class="icon" refresh update matTooltip="Editar Beneficiario">

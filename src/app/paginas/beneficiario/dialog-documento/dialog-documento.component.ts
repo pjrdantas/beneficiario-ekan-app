@@ -69,7 +69,6 @@ export class DialogDocumentoComponent implements OnInit {
   ngOnInit(): void {
     this.titulo = 'Cadastrar Documento';
     this.initializeFormGroup();
-    const beneficiario = new Beneficiario();
     this.beneficiario.id = this.data.id;
     this.beneficiario.beneficiarioNome = this.data.beneficiarioNome;
     this.beneficiario.beneficiarioTelefone = this.data.beneficiarioTelefone;
@@ -93,7 +92,7 @@ export class DialogDocumentoComponent implements OnInit {
 
   onAdd(): void {
     this.onNextDocumento();
-    console.info('onAdd() - this.beneficiario.id :',this.beneficiario.id);
+    console.info('onAdd() - this.beneficiario.id :', this.beneficiario.id);
     const operation$ = this.beneficiario.id
       ? this.beneficiarioService.updateBeneficiario(this.beneficiario)
       : this.beneficiarioService.addBeneficiario(this.beneficiario);

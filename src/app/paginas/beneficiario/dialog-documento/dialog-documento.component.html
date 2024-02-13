@@ -29,14 +29,14 @@
 
             <mat-form-field>
               <mat-label> Data de Atualização </mat-label>
-              <input matInput  [maxlength]="10" inputDateMask formControlName="documentoDataAtualizacao"
+              <input matInput [maxlength]="10" inputDateMask formControlName="documentoDataAtualizacao"
                 [(ngModel)]="documento.documentoDataAtualizacao" required>
               <mat-error>A data de atualização é obrigatória.</mat-error>
             </mat-form-field>
             <br />
             <mat-form-field>
               <mat-label> Data de Inclusão </mat-label>
-              <input matInput  [maxlength]="10" inputDateMask formControlName="documentoDataInclusao"
+              <input matInput [maxlength]="10" inputDateMask formControlName="documentoDataInclusao"
                 [(ngModel)]="documento.documentoDataInclusao" placeholder="Digite a data da inclusão" required>
               <mat-error>A data da inclusão é obrigatória.</mat-error>
             </mat-form-field>
@@ -46,15 +46,14 @@
       </mat-grid-list>
 
       <mat-dialog-actions>
-        <button mat-raised-button mat-dialog-close="refresh" class="dialog-botao-ok"  (click)="onAdd()"
+        <button mat-raised-button mat-dialog-close="refresh" class="dialog-botao-ok" (click)="onAdd()"
           [disabled]="form.invalid">
           <i class="fa fa-check" aria-hidden="true"></i> Salvar
         </button>
 
-        <button mat-raised-button class="dialog-botao-ok"  (click)="onNextDocumento()"
-        [disabled]="form.invalid">
-        <i class="fa fa-check" aria-hidden="true"></i> Proximo
-      </button>
+        <button mat-raised-button class="dialog-botao-ok" (click)="onNextDocumento()" [disabled]="form.invalid">
+          <i class="fa fa-check" aria-hidden="true"></i> Proximo
+        </button>
         <button mat-raised-button mat-dialog-close="refresh" class="dialog-botao-cancel">
           <i class="fa fa-ban" aria-hidden="true"></i> Cancelar
         </button>
